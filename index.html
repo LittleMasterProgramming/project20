@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bangladesh Future Simulator | National Policy & Spatial Modeling</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-base: #060b11;
+      --bg-surface: #0c1521;
+      --bg-card: #121f30;
+      --bg-card-hover: #17273d;
+      --border-color: rgba(52, 211, 153, 0.15);
+      --border-highlight: rgba(52, 211, 153, 0.4);
+      --primary: #10b981;
+      --primary-glow: rgba(16, 185, 129, 0.35);
+      --emerald: #34d399;
+      --teal: #14b8a6;
+      --amber: #f59e0b;
+      --cyan: #06b6d4;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Gradients & Utilities */
+    .text-gradient-emerald {
+      background: linear-gradient(135deg, #6ee7b7 0%, #34d399 50%, #059669 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      background: rgba(6, 11, 17, 0.85);
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 0;
+    }
+    .navbar-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none;
+    }
+    .brand-icon-wrapper {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-sm);
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .brand-text h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+    .brand-text p {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+    }
+    .navbar-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--emerald); }
+    .navbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--emerald);
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .btn-primary-glow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #022013;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 0 20px var(--primary-glow);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary-glow:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.55);
+    }
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(18, 31, 48, 0.8);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--emerald);
+    }
+
+    /* Hero */
+    .hero-section {
+      padding: 72px 0 48px;
+      background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 60%);
+      text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(52, 211, 153, 0.08);
+      border: 1px solid rgba(52, 211, 153, 0.2);
+      color: var(--emerald);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      line-height: 1.15;
+    }
+    .hero-desc {
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 32px;
+      font-size: 1.05rem;
+    }
+
+    /* Interactive Console */
+    .console-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin-bottom: 56px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+    .console-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    .console-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+    }
+    .control-slider-group {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .control-slider-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .slider-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .slider-val {
+      font-family: var(--font-mono);
+      color: var(--emerald);
+      font-weight: 700;
+    }
+    .custom-slider {
+      width: 100%;
+      accent-color: #10b981;
+      height: 6px;
+      background: #1e293b;
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Metric Result Strip */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 20px;
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+    .metric-title {
+      color: var(--text-dim);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
+    }
+    .metric-number {
+      font-family: var(--font-mono);
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--emerald);
+    }
+
+    /* Scenarios Grid */
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+    .scenarios-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      margin-bottom: 64px;
+    }
+    .scenario-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      transition: all 0.25s;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .scenario-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-highlight);
+      background: var(--bg-card);
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 14px;
+    }
+    .badge-emerald { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .badge-amber { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .badge-cyan { background: rgba(6, 182, 212, 0.15); color: #22d3ee; }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .card-meta-row {
+      display: flex;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 16px;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-family: var(--font-mono);
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border-color);
+      background: #04080c;
+      padding: 48px 0;
+      margin-top: 60px;
+    }
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+    @media(max-width: 768px) {
+      .navbar-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="container navbar-container">
+      <a href="#" class="navbar-brand">
+        <div class="brand-icon-wrapper">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+            <path d="M2 12h20"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 class="text-gradient-emerald">Bangladesh Future Simulator</h1>
+          <p>Spatial AI &amp; Policy Forecasting Engine</p>
+        </div>
+      </a>
+      <nav class="navbar-links">
+        <a href="#simulator" class="nav-link">Scenario Console</a>
+        <a href="#scenarios" class="nav-link">Strategic Scenarios</a>
+        <a href="#transformation" class="nav-link">Current → Future Pathway</a>
+        <a href="#delta2100" class="nav-link">Delta 2100 Framework</a>
+      </nav>
+      <div class="navbar-actions">
+        <div class="status-pill">
+          <span class="pulse-dot"></span>
+          <span>SimEngine v2.4 Active</span>
+        </div>
+        <button class="btn-primary-glow" onclick="runSim()">
+          <span>Simulate 2050</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-eyebrow">
+        <span>● Bangladesh Delta Plan 2100 &amp; Vision 2050</span>
+      </div>
+      <h2 class="hero-title">Model the Next 3 Decades of <br><span class="text-gradient-emerald">Spatial, Economic &amp; Climate Trajectory</span></h2>
+      <p class="hero-desc">Interactive multidimensional policy engine forecasting deltaic morphometry, renewable shift, regional urbanization, and socio-economic resilience.</p>
+    </div>
+  </section>
+
+  <!-- Main Simulator Console -->
+  <main class="container" id="simulator">
+    <div class="console-card">
+      <div class="console-header">
+        <div>
+          <h3 style="font-size: 1.3rem; font-weight: 700;">National Policy Variables Console</h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">Adjust systemic parameters to run real-time stress testing across the 8 administrative divisions.</p>
+        </div>
+        <button class="btn-secondary" style="padding: 8px 16px; font-size: 0.85rem;" onclick="resetDefaults()">Reset Baseline</button>
+      </div>
+
+      <div class="console-grid">
+        <div class="control-slider-group">
+          <div class="control-slider-header">
+            <span class="slider-label">Delta 2100 Embankment Capex</span>
+            <span class="slider-val" id="capex-val">$4.2B / yr</span>
+          </div>
+          <input type="range" class="custom-slider" min="1" max="15" step="0.5" value="4.2" id="capex-range" oninput="updateMetrics()">
+          <span style="font-size: 0.75rem; color: var(--text-dim);">Tidal surge &amp; riverine erosion resilience funding</span>
+        </div>
+
+        <div class="control-slider-group">
+          <div class="control-slider-header">
+            <span class="slider-label">Clean Energy Share Target</span>
+            <span class="slider-val" id="energy-val">32%</span>
+          </div>
+          <input type="range" class="custom-slider" min="5" max="80" step="1" value="32" id="energy-range" oninput="updateMetrics()">
+          <span style="font-size: 0.75rem; color: var(--text-dim);">Solar microgrids, wind corridor, &amp; cross-border hydro</span>
+        </div>
+
+        <div class="control-slider-group">
+          <div class="control-slider-header">
+            <span class="slider-label">Decentralization Rate (Dhaka Outflow)</span>
+            <span class="slider-val" id="urban-val">2.8% / yr</span>
+          </div>
+          <input type="range" class="custom-slider" min="0" max="8" step="0.2" value="2.8" id="urban-range" oninput="updateMetrics()">
+          <span style="font-size: 0.75rem; color: var(--text-dim);">Growth diversion to Chattogram, Rajshahi &amp; Sylhet hubs</span>
+        </div>
+      </div>
+
+      <!-- Live Dynamic Metrics Strip -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-title">Displaced Population Risk</div>
+          <div class="metric-number" id="m-displaced">1.2M</div>
+          <span style="font-size: 0.75rem; color: #34d399;">-38% vs baseline</span>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Projected GDP Growth</div>
+          <div class="metric-number" id="m-gdp">7.4%</div>
+          <span style="font-size: 0.75rem; color: #34d399;">+1.1% boost</span>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Carbon Intensity Index</div>
+          <div class="metric-number" id="m-carbon">0.42</div>
+          <span style="font-size: 0.75rem; color: #38bdf8;">Paris Accord Target Met</span>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Food Security Index</div>
+          <div class="metric-number" id="m-food">89 / 100</div>
+          <span style="font-size: 0.75rem; color: #34d399;">High Stability</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scenarios -->
+    <h3 class="section-title" id="scenarios">Key Strategic Scenarios</h3>
+    <div class="scenarios-grid">
+      <div class="scenario-card">
+        <div>
+          <span class="badge badge-emerald">Scenario A — Recommended</span>
+          <h4 class="card-title">Mega-Delta Climate Fortress</h4>
+          <p class="card-desc">Comprehensive execution of Delta Plan 2100 with polder polderisation, smart sluice gates, and mangrove buffering in the southern Sundarbans rim.</p>
+        </div>
+        <div class="card-meta-row">
+          <span>Confidence: 89%</span>
+          <span>Target: 2045</span>
+        </div>
+      </div>
+
+      <div class="scenario-card">
+        <div>
+          <span class="badge badge-cyan">Scenario B — Growth Corridor</span>
+          <h4 class="card-title">Bay of Bengal Industrial Matrix</h4>
+          <p class="card-desc">Deep-sea port integration at Matarbari combined with hydrogen-ready economic zones connecting Chattogram, Cox's Bazar, and Tripura corridors.</p>
+        </div>
+        <div class="card-meta-row">
+          <span>Confidence: 82%</span>
+          <span>Target: 2038</span>
+        </div>
+      </div>
+
+      <div class="scenario-card">
+        <div>
+          <span class="badge badge-amber">Scenario C — High Stress</span>
+          <h4 class="card-title">Delayed Adaptation &amp; Urban Drift</h4>
+          <p class="card-desc">Sub-optimal drainage funding combined with 1.8°C global heating resulting in severe coastal saline intrusions and secondary migration shocks into Dhaka.</p>
+        </div>
+        <div class="card-meta-row">
+          <span>Risk Level: High</span>
+          <span>Target: 2050</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path></svg>
+        <span style="color: var(--text-main); font-weight: 700;">Bangladesh Future Simulator</span>
+      </div>
+      <p>© 2026 Open Spatial Policy &amp; National Modeling Initiative. Fully self-contained build.</p>
+    </div>
+  </footer>
+
+  <script>
+    function updateMetrics() {
+      const capex = parseFloat(document.getElementById('capex-range').value);
+      const energy = parseInt(document.getElementById('energy-range').value);
+      const urban = parseFloat(document.getElementById('urban-range').value);
+
+      document.getElementById('capex-val').innerText = `$${capex.toFixed(1)}B / yr`;
+      document.getElementById('energy-val').innerText = `${energy}%`;
+      document.getElementById('urban-val').innerText = `${urban.toFixed(1)}% / yr`;
+
+      // Dynamic reactive computations
+      const displaced = Math.max(0.3, (3.2 - (capex * 0.22) - (urban * 0.15))).toFixed(1);
+      const gdp = (5.5 + (energy * 0.035) + (capex * 0.12)).toFixed(1);
+      const carbon = Math.max(0.18, (0.75 - (energy * 0.0075))).toFixed(2);
+      const food = Math.min(98, Math.round(70 + (capex * 1.8)));
+
+      document.getElementById('m-displaced').innerText = `${displaced}M`;
+      document.getElementById('m-gdp').innerText = `${gdp}%`;
+      document.getElementById('m-carbon').innerText = carbon;
+      document.getElementById('m-food').innerText = `${food} / 100`;
+    }
+
+    function resetDefaults() {
+      document.getElementById('capex-range').value = 4.2;
+      document.getElementById('energy-range').value = 32;
+      document.getElementById('urban-range').value = 2.8;
+      updateMetrics();
+    }
+
+    function runSim() {
+      updateMetrics();
+      const btn = document.querySelector('.btn-primary-glow span');
+      const original = btn.innerText;
+      btn.innerText = 'Computed Scenario 2050 ✓';
+      setTimeout(() => btn.innerText = original, 2000);
+    }
+  </script>
+</body>
+</html>
